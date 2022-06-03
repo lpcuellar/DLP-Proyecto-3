@@ -54,7 +54,7 @@ Characters =				(.CharName = ' '
 
 	"CHARACTERS"			(.print("LEYENDO CHARACTERS").)
 	{
-		Ident<CharName>	(.Counter++print("Char Set {0}: {1}",Counter,CharName).)
+		Ident<CharName>	(.Counter+=print("Char Set {0}: {1}",Counter,CharName).)
 		"="
 		CharSet			
 		{
@@ -73,7 +73,7 @@ Keywords = 				(.KeyName = ' '
 	"KEYWORDS"			(.print("LEYENDO KEYWORDS").)
 	{
 		
-		Ident<KeyName>	(.Counter++print("KeyWord {0}: {1}",Counter,KeyName).)
+		Ident<KeyName>	(.Counter+=print("KeyWord {0}: {1}",Counter,KeyName).)
 		"="
 		String<StringValue>
 		"."
@@ -88,7 +88,7 @@ Tokens =				(.TokenName = ' '
 	
 	"TOKENS"			(.print("LEYENDO TOKENS").)
 	{
-		Ident<TokenName>	(.Counter++print("Token {0}: {1}",Counter,TokenName).)
+		Ident<TokenName>	(.Counter+=print("Token {0}: {1}",Counter,TokenName).)
 		"="
 		TokenExpr
 		[ExceptKeyword]
@@ -104,7 +104,7 @@ Productions = 				(.Counter = 0.)
 	"PRODUCTIONS"			(.ProdName = ' '
 					  print("LEYENDO PRODUCTIONS").)
 	{
-		Ident<ProdName>	(.Counter++print("Production {0}: {1}",Counter,ProdName).)
+		Ident<ProdName>	(.Counter+=print("Production {0}: {1}",Counter,ProdName).)
 		[Atributos]
 		"="
 		[Codigo]

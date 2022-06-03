@@ -121,7 +121,7 @@ def firstCode(code, productions, dict_ntokens, tokens = []):
             string += x
     
             if x[0] == '"':                
-                new_tokens.append(x[1])
+                new_tokens.append(list1[1])
     
             elif string.replace("(","").strip() in tokens:
                 new_tokens.append(string.replace("(","").strip())
@@ -306,6 +306,7 @@ def python_code(prod_nodes):
     flagWhile = None
     counterPipes = 0
     counterTabs = 2
+
     for x in range(len(prod_nodes)):
         if prod_nodes[x].type == "while":
             code += (counterTabs*'\t') + "while"
@@ -318,7 +319,7 @@ def python_code(prod_nodes):
             flagWhile = x
             counterTabs += 1
     
-        elif prod_nodes[x].type == "if":
+        elif prod_nodes[x].type == "i":
             first = prod_nodes[x].first
             if len(first) > 1:
                 code += (counterTabs*'\t') + "if self.actual_token.type == " + "'" + first[0] + "': \n"
