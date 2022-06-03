@@ -1,8 +1,6 @@
 from automata import Node
 
 def analyze_productions(productions, tokens, keywords):
-    print("**PRODUCTIONS**")
-    print(productions)
     parsed_productions = {}
     string = ""
     def_funct = {}
@@ -63,7 +61,6 @@ def first(productions, tokens):
     
     for l in productions:
         code = productions[l]
-        print("CODE --> " + str(code))
         counter = 0
         #check only the firsts that are within the production code
         string = ""
@@ -85,7 +82,7 @@ def first(productions, tokens):
                 new_tokens.append(string.replace(")","").replace("|","").strip())
                 string = ""
     
-            counter +=1
+            counter += 1
     
         dict_ntokens[l] = new_tokens
         new_tokens = []
@@ -107,7 +104,6 @@ def first(productions, tokens):
                 if counter > 0:
                     break   
 
-    print("DICT_TOKENS --> ", + str(dict_ntokens))
     return dict_ntokens
 
 def firstCode(code, productions, dict_ntokens, tokens = []):
@@ -167,12 +163,6 @@ def firstCode(code, productions, dict_ntokens, tokens = []):
     return new_tokens
 
 def production_tokens(string, production_dict, token_dict):
-    print("\n")
-    print("production_tokens")
-    print("string --> ", str(string))
-    print("production_dict --> ", str(production_dict))
-    print("tokens --> " + str(token_dict))
-    print("\n")
     skip = 0
     operator = ""
     exclude = ['[', '{', '}', ']', '|', '"', "(",")", "<"]
@@ -229,7 +219,7 @@ def production_tokens(string, production_dict, token_dict):
                 
             if is_token:
                 operator = operator.strip()
-                tkk = Node(type="Node", value=f"{operator}", first=x)
+                tkk = Node(type="Node", value=f"{operator}", first=None)
                 stack.append(tkk)
     
             if ch == "{":

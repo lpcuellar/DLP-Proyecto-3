@@ -36,10 +36,10 @@ class Parser:
     
 	def Stat(self):
 		value = 0
-		value = self.expression(value)
+		value = self.Expression(value)
 		print(value)
 
-	def expression(self,result1):
+	def Expression(self,result1):
 		result1, result2 = 0, 0
 		result1 = self.Term(result1)
 		while self.actual_token.value == "+"or self.actual_token.value == "-":
@@ -83,7 +83,7 @@ class Parser:
 			result = self.Number(result)
 		if self.actual_token.value == '(': 
 			self.read('(')
-			result = self.expression(result)
+			result = self.Expression(result)
 			self.read(')')
 		result*=signo
 		return result
