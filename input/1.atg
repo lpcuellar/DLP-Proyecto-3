@@ -1,0 +1,45 @@
+COMPILER Aritmetica    
+
+CHARACTERS 
+
+letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz". 
+digit = "0123456789" .
+tab = CHR(9).
+eol = CHR(10).
+
+TOKENS
+
+ident = letter{letter|digit} EXCEPT KEYWORDS.
+number = digit{digit}.
+
+PRODUCTIONS
+
+Expr= {Stat ";"}".".
+
+Stat = 							(.value.)
+	Expression<value>		(.print(string(value)).)
+	.
+
+Expressionint result> =		(.result1,result2.)
+	Term<result1>
+	{    "+"Term<result2>		(.result1+=result2.)
+	   | "-"Term<result2>		(.result1-=result2.)
+	}							(.result=result1.)
+								(.return result.)
+	.
+
+Termint result>=				(.result1,result2.)
+	Factorresult1>
+	{    "*"Factorresult2>	(.result1*=result2.)
+	   | "/"Factorresult2>	(.result1/=result2.)
+	}							(.result=result1.)
+								(.return result.)
+	.
+	
+Factorint result> =	(.signo=1.)
+	["-"(.signo = -1.)]
+	( Numberresult> | "("Expression<result>")") (.result*=signo.) (.return result.).
+	
+Numberint result> =  number (.result = int(self.last_token.value).) (.return result.).
+
+END Aritmetica
