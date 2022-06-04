@@ -2,7 +2,7 @@
 
 def create(dfa, extras, name, code):
     i = 0
-    output = open("./scanners/" + name + ".py", "w+")
+    output = open(name + ".py", "w+")
     output.write(code)
     output.write("#file to test\n\n")
     #output.write("from libs import evaluate\n")

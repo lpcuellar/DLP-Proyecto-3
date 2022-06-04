@@ -1,11 +1,5 @@
-
 OPERATORS = ['|', '*', 'ψ', '?', 'ξ', ')', '(', '{', '}']
 UNITARY = ['*', 'ψ', '?']
-
-"""
-    Class tree to simulate a tree, each node of the tree contains
-    the symbol and the operator or symbol that it is on the right and in the left
-"""
 
 class Tree(object):
     def __init__(self):
@@ -13,11 +7,6 @@ class Tree(object):
         self.right = None
         self.symbol = None
 
-"""
-    Method to generate the tree to use in the direct algorithm
-    @param expression in infix
-    @return tree
-"""
 def generate_tree(expression):
     output = []
     stack = []

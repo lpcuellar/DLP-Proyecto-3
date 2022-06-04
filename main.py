@@ -1,7 +1,7 @@
 from parser import analyze
 from scanner import scan
-from generate_scanner import create
-from parsed_productions import analyze_productions
+from scanner_template import create
+from productions_parser import analyze_productions
 import os, sys, subprocess
 
 def open_file(filename):
@@ -14,7 +14,7 @@ def open_file(filename):
 def main():
     archivo = input("Ingrese el nombre del archivo a provar --> ")
     
-    input_file = open("./input/" + archivo)
+    input_file = open(archivo)
 
     data = input_file.read()
     input_file.close()

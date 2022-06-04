@@ -1,4 +1,3 @@
-
 class Parser:
 	def __init__(self, tokens):
 		self.tokens = tokens
@@ -42,13 +41,13 @@ class Parser:
 	def Expression(self,result1):
 		result1, result2 = 0, 0
 		result1 = self.Term(result1)
-		while self.actual_token.value == "+"or self.actual_token.value == "-":
-			if self.actual_token.value == '+': 
-				self.read('+')
+		while self.actual_token.value == " "-"Term<result2>(.result1-=result2.)"or self.actual_token.value == " "-"Term<result2>(.result1-=result2.)":
+			if self.actual_token.type == ' "-"Term<result2>(.result1-=result2.)': 
+				self.read(' "-"Term<result2>(.result1-=result2.)',True)
 				result2 = self.Term(result2)
 				result1+=result2
-			if self.actual_token.value == '-': 
-				self.read('-')
+			if self.actual_token.type == ' "-"Term<result2>(.result1-=result2.)': 
+				self.read(' "-"Term<result2>(.result1-=result2.)', True)
 				result2 = self.Term(result2)
 				result1-=result2
 				
@@ -57,13 +56,13 @@ class Parser:
 	def Term(self,result):
 		result1, result2 =  0,0
 		result1 = self.Factor(result1)
-		while self.actual_token.value == "*"or self.actual_token.value == "/":
-			if self.actual_token.value == '*': 
-				self.read('*')
+		while self.actual_token.value == " "/"Factor<result2>(.result1/=result2.)"or self.actual_token.value == " "/"Factor<result2>(.result1/=result2.)":
+			if self.actual_token.type == ' "/"Factor<result2>(.result1/=result2.)': 
+				self.read(' "/"Factor<result2>(.result1/=result2.)',True)
 				result2 = self.Factor(result2)
 				result1*=result2
-			if self.actual_token.value == '/': 
-				self.read('/')
+			if self.actual_token.type == ' "/"Factor<result2>(.result1/=result2.)': 
+				self.read(' "/"Factor<result2>(.result1/=result2.)', True)
 				result2 = self.Factor(result2)
 				result1/=result2
 				
@@ -72,21 +71,19 @@ class Parser:
 
 	def Factor(self,result):
 		signo=1
-		if self.actual_token.value == '-': 
-			self.read('-')
-			signo = -1
-		if self.actual_token.type == 'number': 
-			self.read('number', True)
-			result = self.Number(result)
-		if self.actual_token.type == 'decnumber': 
-			self.read('decnumber', True)
-			result = self.Number(result)
-		if self.actual_token.value == '(': 
-			self.read('(')
-			result = self.Expression(result)
-			self.read(')')
-		result*=signo
-		return result
+		signo = -1
+	if self.actual_token.type == 'number': 
+		self.read('number', True)
+		result = self.Number(result)
+	if self.actual_token.type == 'decnumber': 
+		self.read('decnumber', True)
+		result = self.Number(result)
+	if self.actual_token.type ==  ' "(" Expression<result> ")': 
+		self.read(' "(" Expression<result> ")', True)
+		result = self.Expression(result)
+		self.read(')')
+	result*=signo
+	return result
 
 	def Number(self,result):
 		if self.actual_token.type == 'number': 

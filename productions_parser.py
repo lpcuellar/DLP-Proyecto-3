@@ -7,14 +7,14 @@ def analyze_productions(productions, tokens, keywords):
     all_code = ""
     
     for p in productions:
-        string, name = funct_name(p)
+        string, name = get_funct_name(p)
         def_funct[name] = string
         parsed_productions[name] = productions[p]
     
     for p in parsed_productions:
         if p == "Expr":
             string = def_funct[p]
-            stack = production_tokens(parsed_productions[p], parsed_productions, tokens)
+            stack = get_production_tokens(parsed_productions[p], parsed_productions, tokens)
     
             print(p+":\n")
             print(stack)
@@ -25,14 +25,14 @@ def analyze_productions(productions, tokens, keywords):
             all_code += string + '\n'
     
         else:
-            stack = production_tokens(parsed_productions[p], parsed_productions, tokens)
+            stack = get_production_tokens(parsed_productions[p], parsed_productions, tokens)
     
             print(p+":")
             print(stack)
             print('\n')
     
             string = def_funct[p]
-            code = python_code(stack)
+            code = get_python_code(stack)
             string += code
             all_code += string + '\n'
     
@@ -40,7 +40,7 @@ def analyze_productions(productions, tokens, keywords):
     
     return code
     
-def funct_name(id):
+def get_funct_name(id):
     function_list = id.split("<")
     string = ''
     string += "\tdef " + function_list[0] + "(self"
@@ -62,7 +62,6 @@ def first(productions, tokens):
     for l in productions:
         code = productions[l]
         counter = 0
-        #check only the firsts that are within the production code
         string = ""
     
         while counter < len(code):
@@ -74,11 +73,12 @@ def first(productions, tokens):
     
                 counter += 2
     
-            elif string.replace("(","").strip() in tokens: #if the char we are checking is a Node add 
+            elif string.replace("(","").strip() in tokens: 
+
                 new_tokens.append(string.replace("(","").strip())
                 string = ""
     
-            elif string.replace(")","").replace("|","").strip() in tokens: #if the char we are checking is a Node add 
+            elif string.replace(")","").replace("|","").strip() in tokens: 
                 new_tokens.append(string.replace(")","").replace("|","").strip())
                 string = ""
     
@@ -87,11 +87,11 @@ def first(productions, tokens):
         dict_ntokens[l] = new_tokens
         new_tokens = []
 
-    #recursive check productions
+    
         
-    #check the firsts that are within the functions to which the production refers
-    for l in productions: #l es la produccion que estoy leyendo
-        #if it is empty it means that it does not have terminals and searches in the first reference
+    
+    for l in productions: 
+        
         if len(dict_ntokens[l]) == 0:
             code = productions[l]
             counter = 0
@@ -106,7 +106,7 @@ def first(productions, tokens):
 
     return dict_ntokens
 
-def firstCode(code, productions, dict_ntokens, tokens = []):
+def get_first_code(code, productions, dict_ntokens, tokens = []):
     endings = [")", "}", "]"]
     new_tokens = []
     counter = 0
@@ -162,7 +162,7 @@ def firstCode(code, productions, dict_ntokens, tokens = []):
                         break   
     return new_tokens
 
-def production_tokens(string, production_dict, token_dict):
+def get_production_tokens(string, production_dict, token_dict):
     skip = 0
     operator = ""
     exclude = ['[', '{', '}', ']', '|', '"', "(",")", "<"]
@@ -180,16 +180,16 @@ def production_tokens(string, production_dict, token_dict):
 
         ch = string[i]
         follow_ch = string[i+1]
-        #si no esta en los operadores... ni es un espacio
+        
         if ch not in exclude and ch not in firsts_prods:
             operator += ch
     
         else:
-            #revisamos si no existe una produccion ya definida
-            is_production = validate_exist(operator.strip(), production_dict)
+            
+            is_production = get_if_exists(operator.strip(), production_dict)
             operator = operator.replace(")", "")
-            is_token = validate_exist(operator.strip(), token_dict)
-            poss_follow = check_follow(firsts_prods, ch)
+            is_token = get_if_exists(operator.strip(), token_dict)
+            poss_follow = get_follow(firsts_prods, ch)
     
             if poss_follow and follow_ch == '"' and stack[-1].type == "production":
                 val = "self.read('" + ch + "')"
@@ -231,7 +231,7 @@ def production_tokens(string, production_dict, token_dict):
                     i += 1
     
                 buffer = buffer.replace("{", "").replace("}", "")
-                first_de_linea = firstCode(buffer, production_dict, firsts_prods)
+                first_de_linea = get_first_code(buffer, production_dict, firsts_prods)
                 tkk = Node(type="while", value="while", first=first_de_linea)
                 stack.append(tkk)
 
@@ -247,7 +247,7 @@ def production_tokens(string, production_dict, token_dict):
                     buffer += ch
                     i += 1
 
-                x = firstCode(buffer, production_dict, firsts_prods)
+                x = get_first_code(buffer, production_dict, firsts_prods)
                 tkk_if = Node(type="if", value="if()", first=x)
                 stack.append(tkk_if)
                 
@@ -261,13 +261,13 @@ def production_tokens(string, production_dict, token_dict):
     
             operator = ""
 
-        #sacamos codigo.
+        
         if ch == "(" and follow_ch == ".":
             x, skip = get_code(string[i:])
             
             stack.append(Node(type="code", value=x[2:], first=""))
 
-        #if entre parentesis
+        
         elif ch == "(" and follow_ch != "." and follow_ch != '"':
             buffer = ""
     
@@ -276,12 +276,12 @@ def production_tokens(string, production_dict, token_dict):
                 buffer += ch
                 i += 1
 
-            x = firstCode(buffer, production_dict, firsts_prods, token_dict)
+            x = get_first_code(buffer, production_dict, firsts_prods, token_dict)
             tkk_if = Node(type="if op", value="", first=x)
             stack.append(tkk_if)
             ifFlag = True
 
-        #posible end if?
+        
         elif ch == ")" and follow_ch != '"' and ifFlag:
             ifFlag = False
             tkk_end = Node(type="end if op", value="", first=None)
@@ -292,7 +292,7 @@ def production_tokens(string, production_dict, token_dict):
 
     return stack
 
-def check_follow(first, ch):
+def get_follow(first, ch):
     possibleFollow = False
     for i in first:
         for x in i:
@@ -301,7 +301,7 @@ def check_follow(first, ch):
     
     return possibleFollow
             
-def python_code(prod_nodes):
+def get_python_code(prod_nodes):
     code = ""
     flagWhile = None
     counterPipes = 0
@@ -474,7 +474,7 @@ def python_code(prod_nodes):
                     
     return code
 
-def validate_exist(val, dictionary):
+def get_if_exists(val, dictionary):
     keys = dictionary.keys()
     isProd = False
     
@@ -518,7 +518,7 @@ def get_code(string):
     return toReturn, counter + 2
 
 def write_code(code):
-    output = open("./scanners/" + "prueba_prod" + ".py", "w+")
+    output = open("test" + ".py", "w+")
     
     clase="""
 class Parser:

@@ -40,12 +40,12 @@ class Parser:
 
 	def Expressionintresult>(self):
 		result1,result2
-		while self.actual_token.value == "+"or self.actual_token.value == "-":
-			if self.actual_token.value == '+': 
-				self.read('+')
+		while self.actual_token.value == " "-"Term<result2>(.result1-=result2.)"or self.actual_token.value == " "-"Term<result2>(.result1-=result2.)":
+			if self.actual_token.type == ' "-"Term<result2>(.result1-=result2.)': 
+				self.read(' "-"Term<result2>(.result1-=result2.)',True)
 				result1+=result2
-			if self.actual_token.value == '-': 
-				self.read('-')
+			if self.actual_token.type == ' "-"Term<result2>(.result1-=result2.)': 
+				self.read(' "-"Term<result2>(.result1-=result2.)', True)
 				result1-=result2
 				
 		result=result1
@@ -53,12 +53,12 @@ class Parser:
 
 	def Termintresult>(self):
 		result1,result2
-		while self.actual_token.value == "*"or self.actual_token.value == "/":
-			if self.actual_token.value == '*': 
-				self.read('*')
+		while self.actual_token.value == " "/"Factorresult2>(.result1/=result2.)"or self.actual_token.value == " "/"Factorresult2>(.result1/=result2.)":
+			if self.actual_token.type == ' "/"Factorresult2>(.result1/=result2.)': 
+				self.read(' "/"Factorresult2>(.result1/=result2.)',True)
 				result1*=result2
-			if self.actual_token.value == '/': 
-				self.read('/')
+			if self.actual_token.type == ' "/"Factorresult2>(.result1/=result2.)': 
+				self.read(' "/"Factorresult2>(.result1/=result2.)', True)
 				result1/=result2
 				
 		result=result1
@@ -66,13 +66,11 @@ class Parser:
 
 	def Factorintresult>(self):
 		signo=1
-		if self.actual_token.value == '-': 
-			self.read('-')
-			signo = -1
-			if self.actual_token.value == '(': 
-				self.read('(')
-			result*=signo
-			return result
+		signo = -1
+		if self.actual_token.type == ' "("Expression<result>")': 
+			self.read(' "("Expression<result>")',True)
+		result*=signo
+		return result
 
 	def Numberintresult>(self):
 		self.read('number', True)

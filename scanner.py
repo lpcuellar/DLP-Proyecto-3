@@ -1,5 +1,3 @@
-
-
 COMMENTS = ["/*", "*/", "//"]
 
 no_keyword = False
@@ -222,10 +220,3 @@ def get_end(file, actual, name):
         return True
     
     return False
-
-
-if __name__ == "__main__":
-    file = open("input/Ejemplo.txt")
-    content = file.read()
-    scanner(content)
-    file.close()
